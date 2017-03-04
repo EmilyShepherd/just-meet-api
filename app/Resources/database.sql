@@ -36,8 +36,8 @@ DROP TABLE IF EXISTS `just_meet`.`meeting`;
 CREATE TABLE IF NOT EXISTS `just_meet`.`meeting` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
-    `startime` DATETIME NOT NULL,
-    `endtime` DATETIME NULL,
+    `start_time` DATETIME NOT NULL,
+    `end_time` DATETIME NULL,
     PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
