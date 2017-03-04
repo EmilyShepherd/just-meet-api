@@ -49,7 +49,7 @@ class User
 
     /**
      * @var Meeting
-     * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\Meeting")
+     * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\Meeting", inversedBy="attendees")
      * @ORM\JoinTable(name="attendee",
      *      joinColumns={
      *          @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
