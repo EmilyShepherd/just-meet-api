@@ -30,7 +30,3 @@ monolog:
         #    type:   chromephp
         #    level:  info
 
-nelmio_api_doc:
-    name: Just Meet API Docs
-    cache:
-        enabled: false
