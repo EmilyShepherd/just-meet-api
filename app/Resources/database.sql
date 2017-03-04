@@ -36,8 +36,8 @@ DROP TABLE IF EXISTS `just_meet`.`meeting`;
 CREATE TABLE IF NOT EXISTS `just_meet`.`meeting` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
-    `startime` DATETIME NOT NULL,
-    `endtime` DATETIME NULL,
+    `start_time` DATETIME NOT NULL,
+    `end_time` DATETIME NULL,
     PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -72,7 +72,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `just_meet`.`action`;
 
 CREATE TABLE IF NOT EXISTS `just_meet`.`action` (
-    `id` INT UNSIGNED NOT NULL,
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `meeting_id` INT UNSIGNED NOT NULL,
     `topic` VARCHAR(50) NOT NULL,
     `description` TEXT NULL,
@@ -116,7 +116,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `just_meet`.`agenda`;
 
 CREATE TABLE IF NOT EXISTS `just_meet`.`agenda` (
-    `id` INT UNSIGNED NOT NULL,
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `meeting_id` INT UNSIGNED NOT NULL,
     `topic` VARCHAR(50) NOT NULL,
     `description` TEXT NULL,
