@@ -173,6 +173,9 @@ class DefaultController extends Controller
             $accessor->setRawValue('endTime', new \DateTime($value));
         }
 
+        $user->meetings->add($meeting);
+
+        $this->getEntityManager()->persist($user);
         $this->getEntityManager()->persist($meeting);
         $this->getEntityManager()->flush();
 
