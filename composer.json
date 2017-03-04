@@ -49,12 +49,10 @@
             "JustMeet\\DatabaseSetup::rebuild"
         ],
         "post-install-cmd": [
-            "@symfony-scripts",
-            "@db-rebuild"
+            "@symfony-scripts"
         ],
         "post-update-cmd": [
-            "@symfony-scripts",
-            "@db-rebuild"
+            "@symfony-scripts"
         ]
     },
     "extra": {
