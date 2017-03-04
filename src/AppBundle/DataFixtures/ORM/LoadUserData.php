@@ -34,8 +34,11 @@ class LoadUserData implements FixtureInterface
         $accessor->setRawValue('startTime', new \DateTime());
         $meeting->attendees->add($user);
         $meeting->attendees->add($user2);
+        $user->meetings->add($meeting);
+        $user2->meetings->add($meeting);
         $manager->persist($meeting);
-
+        $manager->persist($user);
+        $manager->persist($user2);
         $manager->flush();
     }
 }
