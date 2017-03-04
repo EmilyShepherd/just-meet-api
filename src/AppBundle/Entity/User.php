@@ -24,7 +24,7 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose
-     * @JMS\Groups({"full"})
+     * @JMS\Groups({"item", "full"})
      */
     private $id;
 
@@ -68,15 +68,7 @@ class User
     
     /**
      * @var Action
-     * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\Action")
-     * @ORM\JoinTable(name="action_user",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="action_id", referencedColumnName="id", onDelete="CASCADE")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     *      }
-     * )
+     * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\Action", mappedBy="users")
      */
     private $actions;
 

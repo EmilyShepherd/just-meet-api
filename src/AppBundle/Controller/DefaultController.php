@@ -338,6 +338,10 @@ class DefaultController extends Controller
      *          },
      *          {
      *              "name"="description"
+     *          },
+     *          {
+     *              "name"="users",
+     *              "dataType"="array"
      *          }
      *      }
      * )
@@ -354,6 +358,20 @@ class DefaultController extends Controller
         if ($value = $request->request->get('description'))
         {
             $action->description = $value;
+        }
+
+        if ($value = $request->request->get('users'))
+        {
+            $action->users->clear();
+            if (!is_array($value))
+            {
+                throw new \Exception('Users should be array');
+            }
+
+            foreach ($value as $uid)
+            {
+                $action->users->add($this->getUserOrFail($uid));
+            }
         }
 
         $this->getEntityManager()->persist($action);

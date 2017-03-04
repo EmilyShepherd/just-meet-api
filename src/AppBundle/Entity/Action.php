@@ -62,5 +62,22 @@ class Action
      * )
      */
     private $meeting;
+
+    /**
+     * @var User
+     * @readable
+     * @JMS\Expose
+     * @JMS\Groups({"item", "full"})
+     * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\User", inversedBy="actions")
+     * @ORM\JoinTable(name="action_user",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="action_id", referencedColumnName="id", onDelete="CASCADE")
+     *      }
+     * )
+     */
+    private $users;
 }
 
