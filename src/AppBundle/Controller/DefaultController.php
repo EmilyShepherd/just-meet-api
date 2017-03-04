@@ -26,6 +26,19 @@ class DefaultController extends Controller
     }
 
     /**
+     * Gets all users
+     *
+     * @Route("/users", name="users")
+     */
+    public function getUsersAction()
+    {
+        return new JsonResponse($this->jsonSerialize(
+            $this->getEntityManager()->getRepository(User::class)
+                ->findAll()
+            ));
+    }
+
+    /**
      * Gets the meetings a user can see
      *
      * @Route("/user/{id}/meetings", name="meetings")
