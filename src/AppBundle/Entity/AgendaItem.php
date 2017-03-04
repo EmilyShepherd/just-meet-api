@@ -43,7 +43,7 @@ class AgendaItem
     /**
      * @var Meeting
      * @JMS\Expose
-     * @ORM\ManyToOne(targetEntity="JustMeet\AppBundle\Entity\Meeting")
+     * @ORM\ManyToOne(targetEntity="JustMeet\AppBundle\Entity\Meeting", inversedBy="agendaItems")
      * @ORM\JoinColumns(
      *      @ORM\JoinColumn(name="meeting_id", referencedColumnName="id", onDelete="CASCADE")
      * )

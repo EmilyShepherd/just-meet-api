@@ -45,7 +45,7 @@ class Meeting
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="end_time", type="datetime")
+     * @ORM\Column(name="end_time", type="datetime", nullable=true)
      * @JMS\Expose
      */
     private $endTime;
@@ -53,15 +53,7 @@ class Meeting
     /**
      * @var ArrayCollection
      * @construct new
-     * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\User")
-     * @ORM\JoinTable(name="attendee",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="meeting_id", referencedColumnName="id", onDelete="CASCADE")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     *      }
-     * )
+     * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\User", mappedBy="meeting")
      */
     private $attendees;
 
