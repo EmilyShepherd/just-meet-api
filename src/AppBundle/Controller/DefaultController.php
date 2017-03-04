@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
@@ -371,4 +372,15 @@ class DefaultController extends Controller
 
         return $serializer->toArray($item, $context);
     }
+
+
+    /**
+     * @Route("/{any}", name="preflight", requirements={"any"=".+"})
+     * @Method({"OPTIONS"})
+     */
+    public function preflightAction()
+    {
+        return new Response('', 204, array('Content-Type' => 'text/plain charset=UTF-8', 'Content-Length' => 0));
+    }
+
 }
