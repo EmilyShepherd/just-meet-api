@@ -182,6 +182,53 @@ class DefaultController extends Controller
         return new JsonResponse($this->jsonSerialize($meeting));
     }
 
+    /**
+     * Update meeting
+     *
+     * @Route("/meeting/{id}", name="update_meeting")
+     * @Method({"PUT"})
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="name"
+     *          },
+     *          {
+     *              "name"="start_time"
+     *          },
+     *          {
+     *              "name"="end_time"
+     *          }
+     *      }
+     * )
+
+     */
+    public function updateMeetingAction(Request $request, $id)
+    {
+        $meeting = $this->getMeetingOrFail($id);
+
+        $accessor = new RawPropertyAccessor($meeting);
+
+        if ($value = $request->request->get('name'))
+        {
+            $accessor->setRawValue('name', $value);
+        }
+
+        if ($value = $request->request->get('start_time'))
+        {
+            $accessor->setRawValue('startTime', new \DateTime($value));
+        }
+
+        if ($value = $request->request->get('end_time'))
+        {
+            $accessor->setRawValue('endTime', new \DateTime($value));
+        }
+
+        $this->getEntityManager()->persist($meeting);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($meeting));
+    }
+
     private function getRequired(Request $request, $name)
     {
         $value = $request->request->get($name);
@@ -196,12 +243,22 @@ class DefaultController extends Controller
 
     private function getUserOrFail($id)
     {
-        $user = $this->getEntityManager()->getRepository(User::class)
+        return $this->getEntityOrFail($id, User::class, 'user');
+    }
+
+    private function getMeetingOrFail($id)
+    {
+        return $this->getEntityOrFail($id, Meeting::class, 'meeting');
+    }
+
+    private function getEntityOrFail($id, $class, $name)
+    {
+        $user = $this->getEntityManager()->getRepository($class)
             ->findOneById($id);
 
         if (!$user)
         {
-            $this->notFound('A user with this ID was not found');
+            $this->notFound('A ' . $name . ' with this ID was not found');
         }
 
         return $user;
