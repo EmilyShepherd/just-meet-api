@@ -1,3 +1,7 @@
 language: php
 php:
   - '7.1'
+env:
+  - JAWSDB_URL=mysql://test:test@example.com/example
+install: composer install --no-scripts
+script: vendor/bin/phpunit

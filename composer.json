@@ -31,13 +31,13 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "twig/twig": "^1.0||^2.0",
         "spaark/composite-utils": "*",
-        "jms/serializer-bundle": "*"
+        "jms/serializer-bundle": "*",
+        "nelmio/api-doc-bundle": "2.11"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
-        "nelmio/api-doc-bundle": "2.11",
         "phpunit/phpunit": "3.7.*"
     },
     "scripts": {
