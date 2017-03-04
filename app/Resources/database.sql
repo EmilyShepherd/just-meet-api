@@ -72,7 +72,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `just_meet`.`action`;
 
 CREATE TABLE IF NOT EXISTS `just_meet`.`action` (
-    `id` INT UNSIGNED NOT NULL,
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `meeting_id` INT UNSIGNED NOT NULL,
     `topic` VARCHAR(50) NOT NULL,
     `description` TEXT NULL,
@@ -116,7 +116,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `just_meet`.`agenda`;
 
 CREATE TABLE IF NOT EXISTS `just_meet`.`agenda` (
-    `id` INT UNSIGNED NOT NULL,
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `meeting_id` INT UNSIGNED NOT NULL,
     `topic` VARCHAR(50) NOT NULL,
     `description` TEXT NULL,
