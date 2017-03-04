@@ -1,1 +1,3 @@
-# just-meet
+# Just Meet Backend API
+
+
