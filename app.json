@@ -25,7 +25,8 @@
   "addons": [
     "jawsdb",
     "newrelic",
-    "papertrail"
+    "papertrail",
+    "sengrid"
   ],
   "buildpacks": [
     {
