@@ -12,6 +12,7 @@ use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use JustMeet\AppBundle\Entity\Meeting;
 use JustMeet\AppBundle\Entity\User;
+use JustMeet\AppBundle\Entity\AgendaItem;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class DefaultController extends Controller
@@ -220,6 +221,39 @@ class DefaultController extends Controller
         $this->getEntityManager()->flush();
 
         return new JsonResponse($this->jsonSerialize($meeting));
+    }
+
+    /**
+     * Add agenda item to meeting
+     *
+     * @Route("/meeting/{id}/agenda", name="add_agenda_item")
+     * @Method({"POST"})
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="topic"
+     *          },
+     *          {
+     *              "name"="description"
+     *          }
+     *      }
+     * )
+     */
+    public function addAgendaItemAction(Request $request, $id)
+    {
+        $agenda = new AgendaItem();
+        $agenda->meeting = $this->getMeetingOrFail($id);
+        $agenda->topic = $this->getRequired($request, 'topic');
+
+        if ($value = $request->request->get('description'))
+        {
+            $agenda->description = $value;
+        }
+
+        $this->getEntityManager()->persist($agenda);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($agenda));
     }
 
     private function getRequired(Request $request, $name)
