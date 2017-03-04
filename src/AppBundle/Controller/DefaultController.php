@@ -41,7 +41,7 @@ class DefaultController extends Controller
         }
 
         $meetings = $this->getEntityManager()->getRepository(Meeting::class)
-            ->findAll();
+            ->findByAttendingUser($user);
 
         return new JsonResponse($this->jsonSerialize($meetings));
     }

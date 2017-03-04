@@ -10,7 +10,7 @@ use Spaark\CompositeUtils\Traits\AllReadableTrait;
  * Meeting
  *
  * @ORM\Table(name="meeting")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="JustMeet\AppBundle\Repository\MeetingRepository")
  * @JMS\ExclusionPolicy("all")
  */
 class Meeting
