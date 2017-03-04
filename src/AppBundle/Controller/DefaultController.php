@@ -6,6 +6,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use JMS\Serializer\SerializationContext;
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializerBuilder;
+use JustMeet\AppBundle\Entity\Meeting;
+use JustMeet\AppBundle\Entity\User;
 
 class DefaultController extends Controller
 {
@@ -27,13 +32,36 @@ class DefaultController extends Controller
      */
     public function getMeetingsActions($id)
     {
-        if ($id == 3)
+        $user = $this->getEntityManager()->getRepository(User::class)
+            ->findOneById($id);
+
+        if (!$user)
         {
-            return new JsonResponse(['success' => 'Good show']);
+            $this->notFound('A user with this ID was not found');
         }
-        else
-        {
-            return new JsonResponse(['error' => 'You are lame']);
-        }
+
+        $meetings = $this->getEntityManager()->getRepository(Meeting::class)
+            ->findAll();
+
+        return new JsonResponse($this->jsonSerialize($meetings));
+    }
+
+    private function notFound($text)
+    {
+        throw new \Exception($text);
+    }
+
+    private function getEntityManager()
+    {
+        return $this->container->get('doctrine.orm.entity_manager');
+    }
+
+    private function jsonSerialize($item)
+    {
+        $context = new SerializationContext();
+        $context->setSerializeNull(true);
+        $serializer = SerializerBuilder::create()->build();
+
+        return $serializer->toArray($item, $context);
     }
 }
