@@ -4,7 +4,7 @@ namespace JustMeet\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Spaark\CompositeUtils\Traits\AllReadableTrait;
+use Spaark\CompositeUtils\Traits\PropertyAccessTrait;
 
 /**
  * AgendaItem
@@ -12,10 +12,12 @@ use Spaark\CompositeUtils\Traits\AllReadableTrait;
  * @ORM\Table(name="agenda")
  * @ORM\Entity
  * @JMS\ExclusionPolicy("all")
+ * @IgnoreAnnotation("readable")
+ * @IgnoreAnnotation("writable")
  */
 class AgendaItem
 {
-    use AllReadableTrait;
+    use PropertyAccessTrait;
 
     /**
      * @var integer
@@ -23,6 +25,7 @@ class AgendaItem
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose
+     * @readable
      */
     private $id;
 
@@ -30,18 +33,24 @@ class AgendaItem
      * @var string
      * @ORM\Column(name="topic", type="string")
      * @JMS\Expose
+     * @readable
+     * @writable
      */
     private $topic;
 
     /**
      * @var string
-     * @ORM\Column(name="description", type="string")
+     * @ORM\Column(name="description", type="string", nullable=true)
      * @JMS\Expose
+     * @readable
+     * @writable
      */
     private $description;
 
     /**
      * @var Meeting
+     * @readable
+     * @writable
      * @JMS\Expose
      * @ORM\ManyToOne(targetEntity="JustMeet\AppBundle\Entity\Meeting", inversedBy="agendaItems")
      * @ORM\JoinColumns(
