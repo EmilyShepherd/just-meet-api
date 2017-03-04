@@ -65,15 +65,6 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-nelmio_cors:
-    paths:
-        '^/':
-            allow_origin: ['*']
-            allow_headers: ['X-Custom-Auth']
-            allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
-            max_age: 3600
-            hosts: ['*']
-
 nelmio_api_doc:
     name: Just Meet API Docs
     cache:
