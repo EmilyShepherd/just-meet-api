@@ -380,6 +380,63 @@ class DefaultController extends Controller
         return new JsonResponse($this->jsonSerialize($action, 'item'));
     }
 
+    /**
+     * Adds a user to an action
+     *
+     * @Route("/meeting/{meetingId}/action/{actionId}/users", name="add_action_user")
+     * @Method({"POST"})
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="id"
+     *          }
+     *      }
+     * )
+     */
+    public function addUserToActionPointAction
+    (
+        Request $request,
+        $meetingId,
+        $actionId
+    )
+    {
+        $action = $this->getActionPointOrFail($meetingId, $actionId);
+        $user = $this->getUserOrFail($this->getRequired($request, 'id'));
+
+        $action->users->add($user);
+
+        $this->getEntityManager()->persist($action);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($action, 'item'));
+    }
+
+    /**
+     * Removes a user from an action
+     *
+     * @Route("/meeting/{meetingId}/action/{actionId}/user/{userId}", name="remove_action_user")
+     * @Method({"DELETE"})
+     * @ApiDoc
+     */
+    public function removeUserFromActionPointAction
+    (
+        Request $request,
+        $meetingId,
+        $actionId,
+        $userId
+    )
+    {
+        $action = $this->getActionPointOrFail($meetingId, $actionId);
+        $user = $this->getUserOrFail($userId);
+
+        $action->users->removeElement($user);
+
+        $this->getEntityManager()->persist($action);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($action, 'item'));
+    }
+
     private function getRequired(Request $request, $name)
     {
         $value = $request->request->get($name);
