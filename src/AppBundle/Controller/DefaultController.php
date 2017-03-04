@@ -3,6 +3,7 @@
 namespace JustMeet\AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,6 +12,7 @@ use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use JustMeet\AppBundle\Entity\Meeting;
 use JustMeet\AppBundle\Entity\User;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class DefaultController extends Controller
 {
@@ -28,7 +30,28 @@ class DefaultController extends Controller
     /**
      * Gets all users
      *
+     * ## Return
+     * ```
+     *  [
+     *      {
+     *          "id":11,
+     *          "first_name":
+     *          "Emily",
+     *          "second_name":"Shepherd",
+     *          "email":"emily.shepherd@wearetwogether.com"
+     *      },
+     *      ...
+     * ]
+     * ```
+     *
      * @Route("/users", name="users")
+     * @Method({"GET"})
+     * @ApiDoc(
+     *      resource=true,
+     *      output={
+     *          "class"="JustMeet\AppBundle\Entity\User"
+     *      }
+     * )
      */
     public function getUsersAction()
     {
@@ -41,7 +64,27 @@ class DefaultController extends Controller
     /**
      * Gets the meetings a user can see
      *
+     * ## Return
+     * ```
+     *  [
+     *      {
+     *          "id":11,
+     *          "name": "Hackathon Planning",
+     *          "start_time": "...",
+     *          "end_time": "..."
+     *      },
+     *      ...
+     * ]
+     * ```
      * @Route("/user/{id}/meetings", name="meetings")
+     * @Method({"GET"})
+     * @ApiDoc(
+     *      resource=true,
+     *      output={
+     *          "class"="JustMeet\AppBundle\Entity\Meeting"
+     *      }
+     * )
+     * @param int $id The id of the user
      */
     public function getMeetingsActions($id)
     {
@@ -54,7 +97,25 @@ class DefaultController extends Controller
     /**
      * Gets information about a user
      *
+     * ## Return
+     * ```
+     *  {
+     *      "id":11,
+     *      "first_name":
+     *      "Emily",
+     *      "second_name":"Shepherd",
+     *      "email":"emily.shepherd@wearetwogether.com"
+     *  }
+     * ```
      * @Route("/user/{id}", name="user")
+     * @Method({"GET"})
+     * @ApiDoc(
+     *      resource=true,
+     *      output={
+     *          "class"="JustMeet\AppBundle\Entity\User"
+     *      }
+     * )
+     * @param int $id The id of the user
      */
     public function getUserAction($id)
     {
