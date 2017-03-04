@@ -1,4 +1,6 @@
 bin/
 vendor/
-var/
+var/logs
+var/cache
+var/*.cache
 composer.phar
