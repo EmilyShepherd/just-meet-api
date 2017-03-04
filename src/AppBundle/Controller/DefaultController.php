@@ -32,6 +32,26 @@ class DefaultController extends Controller
      */
     public function getMeetingsActions($id)
     {
+        $meetings = $this->getEntityManager()->getRepository(Meeting::class)
+            ->findByAttendingUser($this->getUserOrFail($id));
+
+        return new JsonResponse($this->jsonSerialize($meetings));
+    }
+
+    /**
+     * Gets information about a user
+     *
+     * @Route("/user/{id}", name="user")
+     */
+    public function getUserAction($id)
+    {
+        return new JsonResponse($this->jsonSerialize(
+            $this->getUserOrFail($id)
+        ));
+    }
+
+    private function getUserOrFail($id)
+    {
         $user = $this->getEntityManager()->getRepository(User::class)
             ->findOneById($id);
 
@@ -40,10 +60,7 @@ class DefaultController extends Controller
             $this->notFound('A user with this ID was not found');
         }
 
-        $meetings = $this->getEntityManager()->getRepository(Meeting::class)
-            ->findByAttendingUser($user);
-
-        return new JsonResponse($this->jsonSerialize($meetings));
+        return $user;
     }
 
     private function notFound($text)
