@@ -1,5 +1,5 @@
 language: php
 php:
   - '7.1'
-install: composer install
+install: composer install --no-scripts
 script: vendor/bin/phpunit
