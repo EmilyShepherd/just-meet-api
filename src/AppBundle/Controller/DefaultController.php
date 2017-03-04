@@ -438,6 +438,46 @@ class DefaultController extends Controller
         return new JsonResponse($this->jsonSerialize($action, 'item'));
     }
 
+    /**
+     * Sends emails after a meeting
+     *
+     * @Route("/meeting/{id}/email")
+     * @Method({"POST"})
+     * @ApiDoc
+     */
+    public function sendEmailsAction(Request $request, $id)
+    {
+        $meeting = $this->getMeetingOrFail($id);
+
+        foreach ($meeting->attendees as $user)
+        {
+            if (!$user->email) continue;
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Hello Email')
+                ->setFrom('update@justmeet.io')
+                ->setTo($user->email)
+                ->setBody(
+                   'Aight mate?',
+                    'text/html'
+                )
+                /*
+                * If you also want to include a plaintext version of the message
+                ->addPart(
+                    $this->renderView(
+                        'Emails/registration.txt.twig',
+                        array('name' => $name)
+                    ),
+                    'text/plain'
+                )
+                */
+            ;
+            $this->get('mailer')->send($message);
+        }
+
+        return new JsonResponse(true);
+    }
+
     private function getRequired(Request $request, $name)
     {
         $value = $request->request->get($name);
@@ -539,7 +579,6 @@ class DefaultController extends Controller
 
         return $serializer->toArray($item, $context);
     }
-
 
     /**
      * @Route("/{any}", name="preflight", requirements={"any"=".+"})
