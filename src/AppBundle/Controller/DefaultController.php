@@ -228,7 +228,7 @@ class DefaultController extends Controller
 
         if (!$value)
         {
-            throw new \Exception($submittedName . ' is required');
+            throw new \Exception($name . ' is required');
         }
 
         return $value;
