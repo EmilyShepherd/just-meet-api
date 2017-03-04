@@ -30,7 +30,7 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
         "twig/twig": "^1.0||^2.0",
-        "spaark/composite-utils": "*",
+        "spaark/composite-utils": "dev-master",
         "jms/serializer-bundle": "*",
         "nelmio/api-doc-bundle": "2.11"
     },

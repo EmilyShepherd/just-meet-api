@@ -6,7 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Spaark\CompositeUtils\Traits\AllReadableTrait;
 use Spaark\CompositeUtils\Traits\AutoConstructTrait;
+use Spaark\CompositeUtils\Traits\PropertyAccessTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use DateTime;
 
 /**
  * Meeting
@@ -15,10 +17,12 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="JustMeet\AppBundle\Repository\MeetingRepository")
  * @JMS\ExclusionPolicy("all")
  * @IgnoreAnnotation("construct")
+ * @IgnoreAnnotation("readable")
+ * @IgnoreAnnotation("writable")
  */
 class Meeting
 {
-    use AllReadableTrait;
+    use PropertyAccessTrait;
 
     /**
      * @var integer
@@ -26,6 +30,7 @@ class Meeting
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose
+     * @readable
      */
     private $id;
 
@@ -33,20 +38,26 @@ class Meeting
      * @var string
      * @ORM\Column(name="name", type="string")
      * @JMS\Expose
+     * @readable
+     * @writable
      */
     private $name;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(name="start_time", type="datetime")
      * @JMS\Expose
+     * @readable
+     * @writable
      */
     private $startTime;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(name="end_time", type="datetime", nullable=true)
      * @JMS\Expose
+     * @readable
+     * @writable
      */
     private $endTime;
 
@@ -54,6 +65,7 @@ class Meeting
      * @var ArrayCollection
      * @construct new
      * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\User", mappedBy="meetings")
+     * @readable
      */
     private $attendees;
 
@@ -61,6 +73,7 @@ class Meeting
      * @var ArrayCollection
      * @construct new
      * @ORM\OneToMany(targetEntity="JustMeet\AppBundle\Entity\Action", mappedBy="meeting")
+     * @readable
      */
     private $actions;
 
@@ -68,6 +81,7 @@ class Meeting
      * @var ArrayCollection
      * @construct new
      * @ORM\OneToMany(targetEntity="JustMeet\AppBundle\Entity\AgendaItem", mappedBy="meeting")
+     * @readable
      */
     private $agendaItems;
 

@@ -13,7 +13,6 @@ use JMS\Serializer\SerializerBuilder;
 use JustMeet\AppBundle\Entity\Meeting;
 use JustMeet\AppBundle\Entity\User;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Spaark\CompositeUtils\Service\RawPropertyAccessor;
 
 class DefaultController extends Controller
 {
@@ -158,19 +157,15 @@ class DefaultController extends Controller
         $user = $this->getUserOrFail($id);
 
         $meeting = new Meeting();
-        $accessor = new RawPropertyAccessor($meeting);
 
-        $accessor->setRawValue('name', 
-            $this->getRequired($request, 'name')
-        );
+        $meeting->name = $this->getRequired($request, 'name');
 
-        $accessor->setRawValue('startTime',
-            new \DateTime($this->getRequired($request, 'start_time'))
-        );
+        $meeting->startTime =
+            new \DateTime($this->getRequired($request, 'start_time'));
 
         if ($value = $request->request->get('end_time'))
         {
-            $accessor->setRawValue('endTime', new \DateTime($value));
+            $meeting->endTime = new \DateTime($value);
         }
 
         $user->meetings->add($meeting);
@@ -206,21 +201,19 @@ class DefaultController extends Controller
     {
         $meeting = $this->getMeetingOrFail($id);
 
-        $accessor = new RawPropertyAccessor($meeting);
-
         if ($value = $request->request->get('name'))
         {
-            $accessor->setRawValue('name', $value);
+            $meeting->name = $value;
         }
 
         if ($value = $request->request->get('start_time'))
         {
-            $accessor->setRawValue('startTime', new \DateTime($value));
+            $meeting->startTime = $value;
         }
 
         if ($value = $request->request->get('end_time'))
         {
-            $accessor->setRawValue('endTime', new \DateTime($value));
+            $meeting->endTime = $value;
         }
 
         $this->getEntityManager()->persist($meeting);
