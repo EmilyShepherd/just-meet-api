@@ -14,6 +14,10 @@
     },
     "PAPERTRAIL_API_TOKEN": {
       "required": true
+    },
+    "SYMFONY_ENV": {
+      "description": "The number of processes to run.",
+      "value": "prod"
     }
   },
   "formation": {
