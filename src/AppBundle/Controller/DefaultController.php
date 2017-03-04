@@ -14,6 +14,7 @@ use JMS\Serializer\SerializerBuilder;
 use JustMeet\AppBundle\Entity\Meeting;
 use JustMeet\AppBundle\Entity\User;
 use JustMeet\AppBundle\Entity\AgendaItem;
+use JustMeet\AppBundle\Entity\Action;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class DefaultController extends Controller
@@ -254,7 +255,7 @@ class DefaultController extends Controller
         $this->getEntityManager()->persist($agenda);
         $this->getEntityManager()->flush();
 
-        return new JsonResponse($this->jsonSerialize($agenda, 'agenda'));
+        return new JsonResponse($this->jsonSerialize($agenda, 'item'));
     }
 
     /**
@@ -290,7 +291,151 @@ class DefaultController extends Controller
         $this->getEntityManager()->persist($agenda);
         $this->getEntityManager()->flush();
 
-        return new JsonResponse($this->jsonSerialize($agenda, 'agenda'));
+        return new JsonResponse($this->jsonSerialize($agenda, 'item'));
+    }
+
+    /**
+     * Add action point
+     *
+     * @Route("/meeting/{id}/actions", name="add_action_point")
+     * @Method({"POST"})
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="topic"
+     *          },
+     *          {
+     *              "name"="description"
+     *          }
+     *      }
+     * )
+     */
+    public function addActionPointAction(Request $request, $id)
+    {
+        $action = new Action();
+        $action->meeting = $this->getMeetingOrFail($id);
+        $action->topic = $this->getRequired($request, 'topic');
+
+        if ($value = $request->request->get('description'))
+        {
+            $action->description = $value;
+        }
+
+        $this->getEntityManager()->persist($action);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($action, 'item'));
+    }
+
+    /**
+     * Updates an action point
+     *
+     * @Route("/meeting/{meetingId}/action/{actionId}", name="update_action_point")
+     * @Method({"PUT"})
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="topic"
+     *          },
+     *          {
+     *              "name"="description"
+     *          },
+     *          {
+     *              "name"="users",
+     *              "dataType"="array"
+     *          }
+     *      }
+     * )
+     */
+    public function updateActionPointAction(Request $request, $meetingId, $actionId)
+    {
+        $action = $this->getActionPointOrFail($meetingId, $actionId);
+
+        if ($value = $request->request->get('topic'))
+        {
+            $action->topic = $value;
+        }
+
+        if ($value = $request->request->get('description'))
+        {
+            $action->description = $value;
+        }
+
+        if ($value = $request->request->get('users'))
+        {
+            $action->users->clear();
+            if (!is_array($value))
+            {
+                throw new \Exception('Users should be array');
+            }
+
+            foreach ($value as $uid)
+            {
+                $action->users->add($this->getUserOrFail($uid));
+            }
+        }
+
+        $this->getEntityManager()->persist($action);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($action, 'item'));
+    }
+
+    /**
+     * Adds a user to an action
+     *
+     * @Route("/meeting/{meetingId}/action/{actionId}/users", name="add_action_user")
+     * @Method({"POST"})
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="id"
+     *          }
+     *      }
+     * )
+     */
+    public function addUserToActionPointAction
+    (
+        Request $request,
+        $meetingId,
+        $actionId
+    )
+    {
+        $action = $this->getActionPointOrFail($meetingId, $actionId);
+        $user = $this->getUserOrFail($this->getRequired($request, 'id'));
+
+        $action->users->add($user);
+
+        $this->getEntityManager()->persist($action);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($action, 'item'));
+    }
+
+    /**
+     * Removes a user from an action
+     *
+     * @Route("/meeting/{meetingId}/action/{actionId}/user/{userId}", name="remove_action_user")
+     * @Method({"DELETE"})
+     * @ApiDoc
+     */
+    public function removeUserFromActionPointAction
+    (
+        Request $request,
+        $meetingId,
+        $actionId,
+        $userId
+    )
+    {
+        $action = $this->getActionPointOrFail($meetingId, $actionId);
+        $user = $this->getUserOrFail($userId);
+
+        $action->users->removeElement($user);
+
+        $this->getEntityManager()->persist($action);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($action, 'item'));
     }
 
     private function getRequired(Request $request, $name)
@@ -307,10 +452,32 @@ class DefaultController extends Controller
 
     private function getAgendaItemOrFail($meetingId, $id)
     {
-        return $this->getEntityOrFail
+        return $this->getMeetingItemOrFail
         (
             AgendaItem::class,
             'agenda item',
+            $meetingId,
+            $id
+        );
+    }
+
+    private function getActionPointOrFail($meetingId, $id)
+    {
+        return $this->getMeetingItemOrFail
+        (
+            Action::class,
+            'action point',
+            $meetingId,
+            $id
+        );
+    }
+
+    private function getMeetingItemOrFail($class, $name, $meetingId, $id)
+    {
+        return $this->getEntityOrFail
+        (
+            $class,
+            $name,
             function($repo) use ($meetingId, $id)
             {
                 return $repo->findByMeetingIdAndId($meetingId, $id);
