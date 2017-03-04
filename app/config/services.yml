@@ -7,3 +7,7 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    app.cors.action_listener:
+        class: AppBundle\Service\CorsHeaderService
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
