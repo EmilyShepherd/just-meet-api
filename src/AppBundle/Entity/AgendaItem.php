@@ -10,7 +10,7 @@ use Spaark\CompositeUtils\Traits\PropertyAccessTrait;
  * AgendaItem
  *
  * @ORM\Table(name="agenda")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="JustMeet\AppBundle\Repository\AgendaItemRepository")
  * @JMS\ExclusionPolicy("all")
  * @IgnoreAnnotation("readable")
  * @IgnoreAnnotation("writable")

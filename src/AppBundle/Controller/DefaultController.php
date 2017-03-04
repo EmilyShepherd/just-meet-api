@@ -256,6 +256,42 @@ class DefaultController extends Controller
         return new JsonResponse($this->jsonSerialize($agenda, 'agenda'));
     }
 
+    /**
+     * Update's an agenda item to
+     *
+     * @Route("/meeting/{meetingId}/agenda/{agendaId}", name="update_agenda_item")
+     * @Method({"PUT"})
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="topic"
+     *          },
+     *          {
+     *              "name"="description"
+     *          }
+     *      }
+     * )
+     */
+    public function updateAgendaItemAction(Request $request, $meetingId, $agendaId)
+    {
+        $agenda = $this->getAgendaItemOrFail($meetingId, $agendaId);
+
+        if ($value = $request->request->get('topic'))
+        {
+            $agenda->topic = $value;
+        }
+
+        if ($value = $request->request->get('description'))
+        {
+            $agenda->description = $value;
+        }
+
+        $this->getEntityManager()->persist($agenda);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($agenda, 'agenda'));
+    }
+
     private function getRequired(Request $request, $name)
     {
         $value = $request->request->get($name);
@@ -268,20 +304,45 @@ class DefaultController extends Controller
         return $value;
     }
 
+    private function getAgendaItemOrFail($meetingId, $id)
+    {
+        return $this->getEntityOrFail
+        (
+            AgendaItem::class,
+            'agenda item',
+            function($repo) use ($meetingId, $id)
+            {
+                return $repo->findByMeetingIdAndId($meetingId, $id);
+            }
+        );
+    }
+
     private function getUserOrFail($id)
     {
-        return $this->getEntityOrFail($id, User::class, 'user');
+        return $this->getEntityByIdOrFail($id, User::class, 'user');
     }
 
     private function getMeetingOrFail($id)
     {
-        return $this->getEntityOrFail($id, Meeting::class, 'meeting');
+        return $this->getEntityByIdOrFail($id, Meeting::class, 'meeting');
     }
 
-    private function getEntityOrFail($id, $class, $name)
+    private function getEntityByIdOrFail($id, $class, $name)
     {
-        $user = $this->getEntityManager()->getRepository($class)
-            ->findOneById($id);
+        return $this->getEntityOrFail
+        (
+            $class,
+            $name,
+            function($repo) use ($id)
+            {
+                return $repo->findOneById($id);
+            }
+        );
+    }
+
+    private function getEntityOrFail($class, $name, $cb)
+    {
+        $user = $cb($this->getEntityManager()->getRepository($class));
 
         if (!$user)
         {
