@@ -5,6 +5,8 @@ namespace JustMeet\AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Spaark\CompositeUtils\Traits\AllReadableTrait;
+use Spaark\CompositeUtils\Traits\AutoConstructTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Meeting
@@ -12,6 +14,7 @@ use Spaark\CompositeUtils\Traits\AllReadableTrait;
  * @ORM\Table(name="meeting")
  * @ORM\Entity(repositoryClass="JustMeet\AppBundle\Repository\MeetingRepository")
  * @JMS\ExclusionPolicy("all")
+ * @IgnoreAnnotation("construct")
  */
 class Meeting
 {
@@ -48,7 +51,8 @@ class Meeting
     private $endTime;
 
     /**
-     * @var User[]
+     * @var ArrayCollection
+     * @construct new
      * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\User")
      * @ORM\JoinTable(name="attendee",
      *      joinColumns={
@@ -62,15 +66,23 @@ class Meeting
     private $attendees;
 
     /**
-     * @var Action[]
+     * @var ArrayCollection
+     * @construct new
      * @ORM\OneToMany(targetEntity="JustMeet\AppBundle\Entity\Action", mappedBy="meeting")
      */
     private $actions;
 
     /**
-     * @var AgendaItem[]
+     * @var ArrayCollection
+     * @construct new
      * @ORM\OneToMany(targetEntity="JustMeet\AppBundle\Entity\AgendaItem", mappedBy="meeting")
      */
     private $agendaItems;
+
+    public function __construct()
+    {
+        $this->attendees = new ArrayCollection();
+        $this->agendaItems = new ArrayCollection();
+    }
 }
 
