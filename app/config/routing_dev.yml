@@ -13,6 +13,3 @@ _errors:
 _main:
     resource: routing.yml
 
-NelmioApiBundle:
-    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
-    prefix: /docs
