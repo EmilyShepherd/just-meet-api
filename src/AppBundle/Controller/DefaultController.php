@@ -13,6 +13,7 @@ use JMS\Serializer\SerializerBuilder;
 use JustMeet\AppBundle\Entity\Meeting;
 use JustMeet\AppBundle\Entity\User;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Spaark\CompositeUtils\Service\RawPropertyAccessor;
 
 class DefaultController extends Controller
 {
@@ -122,6 +123,72 @@ class DefaultController extends Controller
         return new JsonResponse($this->jsonSerialize(
             $this->getUserOrFail($id)
         ));
+    }
+
+    /**
+     * Creates a new meeting
+     *
+     * ## Input
+     * ```
+     *  {
+     *      "name": "Event Name",
+     *      "start_time": "The start Time",
+     *      "end_time": "Optional end time"
+     *  }
+     * ```
+     *
+     * @Route("/user/{id}/meetings", name="create_meeting")
+     * @Method({"POST"})
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="name"
+     *          },
+     *          {
+     *              "name"="start_time"
+     *          },
+     *          {
+     *              "name"="end_time"
+     *          }
+     *      }
+     * )
+     */
+    public function createMeetingAction(Request $request, $id)
+    {
+        $user = $this->getUserOrFail($id);
+
+        $meeting = new Meeting();
+        $accessor = new RawPropertyAccessor($meeting);
+
+        $accessor->setRawValue('name', 
+            $this->getRequired($request, 'name')
+        );
+
+        $accessor->setRawValue('startTime',
+            new \DateTime($this->getRequired($request, 'start_time'))
+        );
+
+        if ($value = $request->request->get('end_time'))
+        {
+            $accessor->setRawValue('endTime', new \DateTime($value));
+        }
+
+        $this->getEntityManager()->persist($meeting);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($meeting));
+    }
+
+    private function getRequired(Request $request, $name)
+    {
+        $value = $request->request->get($name);
+
+        if (!$value)
+        {
+            throw new \Exception($submittedName . ' is required');
+        }
+
+        return $value;
     }
 
     private function getUserOrFail($id)
