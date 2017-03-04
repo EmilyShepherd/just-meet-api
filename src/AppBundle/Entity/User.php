@@ -3,6 +3,7 @@
 namespace JustMeet\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use Spaark\CompositeUtils\Traits\AllReadableTrait;
 
 /**
@@ -10,6 +11,7 @@ use Spaark\CompositeUtils\Traits\AllReadableTrait;
  *
  * @ORM\Table(name="user")
  * @ORM\Entity
+ * @JMS\ExclusionPolicy("all")
  */
 class User
 {
@@ -20,24 +22,28 @@ class User
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(name="first_name", type="string")
+     * @JMS\Expose
      */
     private $firstName;
 
     /**
      * @var string
      * @ORM\Column(name="second_name", type="string")
+     * @JMS\Expose
      */
     private $secondName;
 
     /**
      * @var string
      * @ORM\Column(name="email", type="string")
+     * @JMS\Expose
      */
     private $email;
 

@@ -3,6 +3,7 @@
 namespace JustMeet\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use Spaark\CompositeUtils\Traits\AllReadableTrait;
 
 /**
@@ -10,6 +11,7 @@ use Spaark\CompositeUtils\Traits\AllReadableTrait;
  *
  * @ORM\Table(name="meeting")
  * @ORM\Entity
+ * @JMS\ExclusionPolicy("all")
  */
 class Meeting
 {
@@ -20,24 +22,28 @@ class Meeting
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string")
+     * @JMS\Expose
      */
     private $name;
 
     /**
      * @var \DateTime
      * @ORM\Column(name="start_time", type="datetime")
+     * @JMS\Expose
      */
     private $startTime;
 
     /**
      * @var \DateTime
      * @ORM\Column(name="end_time", type="datetime")
+     * @JMS\Expose
      */
     private $endTime;
 
