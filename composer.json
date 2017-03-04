@@ -13,7 +13,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "JustMeet\\": "src/",
+            "JustMeet\\Tests\\": "tests/"
         }
     },
     "require": {
