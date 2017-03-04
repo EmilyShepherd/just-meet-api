@@ -53,7 +53,7 @@ class Meeting
     /**
      * @var ArrayCollection
      * @construct new
-     * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\User", mappedBy="meeting")
+     * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\User", mappedBy="meetings")
      */
     private $attendees;
 

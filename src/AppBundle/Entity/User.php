@@ -5,6 +5,7 @@ namespace JustMeet\AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Spaark\CompositeUtils\Traits\AllReadableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * User
@@ -59,7 +60,7 @@ class User
      *      }
      * )
      */
-    private $meeting;
+    private $meetings;
     
     /**
      * @var Action
@@ -74,5 +75,11 @@ class User
      * )
      */
     private $actions;
+
+    public function __construct()
+    {
+        $this->meetings = new ArrayCollection();
+        $this->actions = new ArrayCollection();
+    }
 }
 
