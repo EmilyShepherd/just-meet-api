@@ -12,6 +12,7 @@ use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use JustMeet\AppBundle\Entity\Meeting;
 use JustMeet\AppBundle\Entity\User;
+use JustMeet\AppBundle\Entity\AgendaItem;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class DefaultController extends Controller
@@ -222,13 +223,46 @@ class DefaultController extends Controller
         return new JsonResponse($this->jsonSerialize($meeting));
     }
 
+    /**
+     * Add agenda item to meeting
+     *
+     * @Route("/meeting/{id}/agenda", name="add_agenda_item")
+     * @Method({"POST"})
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="topic"
+     *          },
+     *          {
+     *              "name"="description"
+     *          }
+     *      }
+     * )
+     */
+    public function addAgendaItemAction(Request $request, $id)
+    {
+        $agenda = new AgendaItem();
+        $agenda->meeting = $this->getMeetingOrFail($id);
+        $agenda->topic = $this->getRequired($request, 'topic');
+
+        if ($value = $request->request->get('description'))
+        {
+            $agenda->description = $value;
+        }
+
+        $this->getEntityManager()->persist($agenda);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($agenda, 'agenda'));
+    }
+
     private function getRequired(Request $request, $name)
     {
         $value = $request->request->get($name);
 
         if (!$value)
         {
-            throw new \Exception($submittedName . ' is required');
+            throw new \Exception($name . ' is required');
         }
 
         return $value;
@@ -267,10 +301,11 @@ class DefaultController extends Controller
         return $this->container->get('doctrine.orm.entity_manager');
     }
 
-    private function jsonSerialize($item)
+    private function jsonSerialize($item, $group = 'full')
     {
         $context = new SerializationContext();
         $context->setSerializeNull(true);
+        $context->setGroups([$group]);
         $serializer = SerializerBuilder::create()->build();
 
         return $serializer->toArray($item, $context);

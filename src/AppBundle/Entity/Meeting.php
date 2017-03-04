@@ -31,6 +31,7 @@ class Meeting
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose
      * @readable
+     * @JMS\Groups({"agenda", "full"})
      */
     private $id;
 
@@ -40,6 +41,7 @@ class Meeting
      * @JMS\Expose
      * @readable
      * @writable
+     * @JMS\Groups({"agenda", "full"})
      */
     private $name;
 
@@ -49,6 +51,7 @@ class Meeting
      * @JMS\Expose
      * @readable
      * @writable
+     * @JMS\Groups({"agenda", "full"})
      */
     private $startTime;
 
@@ -58,6 +61,7 @@ class Meeting
      * @JMS\Expose
      * @readable
      * @writable
+     * @JMS\Groups({"agenda", "full"})
      */
     private $endTime;
 
@@ -66,6 +70,7 @@ class Meeting
      * @construct new
      * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\User", mappedBy="meetings")
      * @readable
+     * @JMS\Groups({"full"})
      */
     private $attendees;
 
@@ -74,6 +79,7 @@ class Meeting
      * @construct new
      * @ORM\OneToMany(targetEntity="JustMeet\AppBundle\Entity\Action", mappedBy="meeting")
      * @readable
+     * @JMS\Groups({"full"})
      */
     private $actions;
 
@@ -82,6 +88,8 @@ class Meeting
      * @construct new
      * @ORM\OneToMany(targetEntity="JustMeet\AppBundle\Entity\AgendaItem", mappedBy="meeting")
      * @readable
+     * @JMS\Expose
+     * @JMS\Groups({"full"})
      */
     private $agendaItems;
 

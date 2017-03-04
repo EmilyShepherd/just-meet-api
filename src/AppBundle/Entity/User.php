@@ -24,6 +24,7 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose
+     * @JMS\Groups({"full"})
      */
     private $id;
 
@@ -31,6 +32,7 @@ class User
      * @var string
      * @ORM\Column(name="first_name", type="string")
      * @JMS\Expose
+     * @JMS\Groups({"full"})
      */
     private $firstName;
 
@@ -38,6 +40,7 @@ class User
      * @var string
      * @ORM\Column(name="second_name", type="string")
      * @JMS\Expose
+     * @JMS\Groups({"full"})
      */
     private $secondName;
 
@@ -45,6 +48,7 @@ class User
      * @var string
      * @ORM\Column(name="email", type="string")
      * @JMS\Expose
+     * @JMS\Groups({"full"})
      */
     private $email;
 
