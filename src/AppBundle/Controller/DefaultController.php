@@ -253,7 +253,7 @@ class DefaultController extends Controller
         $this->getEntityManager()->persist($agenda);
         $this->getEntityManager()->flush();
 
-        return new JsonResponse($this->jsonSerialize($agenda));
+        return new JsonResponse($this->jsonSerialize($agenda, 'agenda'));
     }
 
     private function getRequired(Request $request, $name)
@@ -301,10 +301,11 @@ class DefaultController extends Controller
         return $this->container->get('doctrine.orm.entity_manager');
     }
 
-    private function jsonSerialize($item)
+    private function jsonSerialize($item, $group = 'full')
     {
         $context = new SerializationContext();
         $context->setSerializeNull(true);
+        $context->setGroups([$group]);
         $serializer = SerializerBuilder::create()->build();
 
         return $serializer->toArray($item, $context);

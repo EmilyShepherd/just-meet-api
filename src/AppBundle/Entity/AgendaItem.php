@@ -26,6 +26,7 @@ class AgendaItem
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose
      * @readable
+     * @JMS\Groups({"agenda", "full"})
      */
     private $id;
 
@@ -35,6 +36,7 @@ class AgendaItem
      * @JMS\Expose
      * @readable
      * @writable
+     * @JMS\Groups({"agenda", "full"})
      */
     private $topic;
 
@@ -44,6 +46,7 @@ class AgendaItem
      * @JMS\Expose
      * @readable
      * @writable
+     * @JMS\Groups({"agenda", "full"})
      */
     private $description;
 
@@ -52,6 +55,7 @@ class AgendaItem
      * @readable
      * @writable
      * @JMS\Expose
+     * @JMS\Groups({"agenda"})
      * @ORM\ManyToOne(targetEntity="JustMeet\AppBundle\Entity\Meeting", inversedBy="agendaItems")
      * @ORM\JoinColumns(
      *      @ORM\JoinColumn(name="meeting_id", referencedColumnName="id", onDelete="CASCADE")
