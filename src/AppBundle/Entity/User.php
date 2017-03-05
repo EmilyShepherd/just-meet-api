@@ -102,8 +102,6 @@ class User
         $return = [];
         foreach ($this->actions as $action)
         {
-            $a = $action->meeting->id;
-            $b = $meeting->id;
             if ($action->meeting->id === $meeting->id)
             {
                 $return[] = $action;
