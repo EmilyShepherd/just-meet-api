@@ -246,6 +246,23 @@ class DefaultController extends Controller
     }
 
     /**
+     * Deletes a user
+     *
+     * @Route("/meeting/{id}", name="delete_meeting")
+     * @Method({"DELETE"})
+     * @ApiDoc
+     */
+    public function deleteMeeting($id)
+    {
+        $meeting = $this->getMeetingOrFail($id);
+
+        $this->getEntityManager()->remove($meeting);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse(true);
+    }
+
+    /**
      * Add agenda item to meeting
      *
      * @Route("/meeting/{id}/agenda", name="add_agenda_item")
