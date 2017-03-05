@@ -28,7 +28,7 @@ class AgendaItem
      * @readable
      * @JMS\Groups({"item", "full"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -38,7 +38,7 @@ class AgendaItem
      * @writable
      * @JMS\Groups({"item", "full"})
      */
-    private $topic;
+    protected $topic;
 
     /**
      * @var string
@@ -48,7 +48,7 @@ class AgendaItem
      * @writable
      * @JMS\Groups({"item", "full"})
      */
-    private $description;
+    protected $description;
 
     /**
      * @var Meeting
@@ -61,6 +61,6 @@ class AgendaItem
      *      @ORM\JoinColumn(name="meeting_id", referencedColumnName="id", onDelete="CASCADE")
      * )
      */
-    private $meeting;
+    protected $meeting;
 }
 

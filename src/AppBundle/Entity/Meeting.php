@@ -35,7 +35,7 @@ class Meeting
      * @readable
      * @JMS\Groups({"item", "full"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -45,7 +45,7 @@ class Meeting
      * @writable
      * @JMS\Groups({"item", "full"})
      */
-    private $name;
+    protected $name;
 
     /**
      * @var DateTime
@@ -55,7 +55,7 @@ class Meeting
      * @writable
      * @JMS\Groups({"item", "full"})
      */
-    private $startTime;
+    protected $startTime;
 
     /**
      * @var DateTime
@@ -65,7 +65,7 @@ class Meeting
      * @writable
      * @JMS\Groups({"item", "full"})
      */
-    private $endTime;
+    protected $endTime;
 
     /**
      * @var ArrayCollection
@@ -74,7 +74,7 @@ class Meeting
      * @readable
      * @JMS\Groups({"full"})
      */
-    private $attendees;
+    protected $attendees;
 
     /**
      * @var ArrayCollection
@@ -84,7 +84,7 @@ class Meeting
      * @JMS\Groups({"full"})
      * @JMS\Expose
      */
-    private $actions;
+    protected $actions;
 
     /**
      * @var ArrayCollection
@@ -94,7 +94,7 @@ class Meeting
      * @JMS\Expose
      * @JMS\Groups({"full"})
      */
-    private $agendaItems;
+    protected $agendaItems;
 
     public function __construct()
     {

@@ -28,7 +28,7 @@ class User
      * @JMS\Expose
      * @JMS\Groups({"item", "full"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -36,7 +36,7 @@ class User
      * @JMS\Expose
      * @JMS\Groups({"full"})
      */
-    private $firstName;
+    protected $firstName;
 
     /**
      * @var string
@@ -44,7 +44,7 @@ class User
      * @JMS\Expose
      * @JMS\Groups({"full"})
      */
-    private $secondName;
+    protected $secondName;
 
     /**
      * @var string
@@ -52,7 +52,7 @@ class User
      * @JMS\Expose
      * @JMS\Groups({"full"})
      */
-    private $email;
+    protected $email;
 
     /**
      * @var Meeting
@@ -66,19 +66,21 @@ class User
      *      }
      * )
      */
-    private $meetings;
+    protected $meetings;
     
     /**
      * @var Action
      * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\Action", mappedBy="users")
      */
-    private $actions;
+    protected $actions;
 
     public function getActionsForMeeting(Meeting $meeting)
     {
         $return = [];
         foreach ($this->actions as $action)
         {
+            $a = $action->meeting->id;
+            $b = $meeting->id;
             if ($action->meeting->id === $meeting->id)
             {
                 $return[] = $action;

@@ -30,7 +30,7 @@ class Action
      * @JMS\Groups({"item", "full"})
      * @readable
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -40,7 +40,7 @@ class Action
      * @readable
      * @writable
      */
-    private $topic;
+    protected $topic;
 
     /**
      * @var string
@@ -50,7 +50,7 @@ class Action
      * @readable
      * @writable
      */
-    private $description;
+    protected $description;
 
     /**
      * @var Meeting
@@ -63,7 +63,7 @@ class Action
      *      @ORM\JoinColumn(name="meeting_id", referencedColumnName="id", onDelete="CASCADE")
      * )
      */
-    private $meeting;
+    protected $meeting;
 
     /**
      * @var User
@@ -80,6 +80,6 @@ class Action
      *      }
      * )
      */
-    private $users;
+    protected $users;
 }
 
