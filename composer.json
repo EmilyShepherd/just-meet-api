@@ -32,7 +32,8 @@
         "twig/twig": "^1.0||^2.0",
         "spaark/composite-utils": "dev-master",
         "jms/serializer-bundle": "*",
-        "nelmio/api-doc-bundle": "2.11"
+        "nelmio/api-doc-bundle": "2.11",
+        "php-amqplib/rabbitmq-bundle": "^1.12"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

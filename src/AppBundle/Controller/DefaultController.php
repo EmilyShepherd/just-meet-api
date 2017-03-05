@@ -177,6 +177,12 @@ class DefaultController extends Controller
         $this->getEntityManager()->persist($meeting);
         $this->getEntityManager()->flush();
 
+        // ok - lets set reminders here
+        // first the sms?
+        $msg = array('user_id' => $user->id, 'meeting_id' => $meeting->id);
+        $this->get('old_sound_rabbit_mq.send_sms_producer')->publish(serialize($msg));
+
+
         return new JsonResponse($this->jsonSerialize($meeting));
     }
 

@@ -12,6 +12,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
 
+    send_sms_service:
+        class: JustMeet\AppBundle\Consumer\SendSmsConsumer
+
     utility.jsonrequest.action_listener:
         class: JustMeet\AppBundle\EventListener\JsonListener
         arguments: []
