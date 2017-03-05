@@ -15,10 +15,13 @@ use JustMeet\AppBundle\Entity\Meeting;
 use JustMeet\AppBundle\Entity\User;
 use JustMeet\AppBundle\Entity\AgendaItem;
 use JustMeet\AppBundle\Entity\Action;
+use JustMeet\AppBundle\Entity\Token;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class DefaultController extends Controller
 {
+    private $user;
+
     /**
      * @Route("/", name="homepage")
      */
@@ -28,6 +31,36 @@ class DefaultController extends Controller
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         ]);
+    }
+
+    /**
+     * Attempt to log in
+     *
+     * @Route("/user/login")
+     * @Method({"POST"})
+     * @ApiDoc(
+     *      resource=true,
+     *      requirements={
+     *          {
+     *              "name"="email"
+     *          },
+     *          {
+     *              "name"="password"
+     *          }
+     *      }
+     * )
+     */
+    public function loginAction(Request $request)
+    {
+        $user = $this->getEntityManager()->getRepository(User::class)
+            ->findOneByEmail($this->getRequired($request, 'email'));
+
+        $token = new Token(uniqid(), $user);
+
+        $this->getEntityManager()->persist($token);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse($this->jsonSerialize($token));
     }
 
     /**
@@ -56,8 +89,10 @@ class DefaultController extends Controller
      *      }
      * )
      */
-    public function getUsersAction()
+    public function getUsersAction(Request $request)
     {
+        $this->checkAuth($request);
+
         return new JsonResponse($this->jsonSerialize(
             $this->getEntityManager()->getRepository(User::class)
                 ->findAll()
@@ -89,8 +124,10 @@ class DefaultController extends Controller
      * )
      * @param int $id The id of the user
      */
-    public function getMeetingsActions($id)
+    public function getMeetingsActions(Request $request, $id)
     {
+        $this->checkAuth($request);
+
         $meetings = $this->getEntityManager()->getRepository(Meeting::class)
             ->findByAttendingUser($this->getUserOrFail($id));
 
@@ -120,8 +157,10 @@ class DefaultController extends Controller
      * )
      * @param int $id The id of the user
      */
-    public function getUserAction($id)
+    public function getUserAction(Request $request, $id)
     {
+        $this->checkAuth($request);
+
         return new JsonResponse($this->jsonSerialize(
             $this->getUserOrFail($id)
         ));
@@ -158,6 +197,8 @@ class DefaultController extends Controller
      */
     public function createMeetingAction(Request $request, $id)
     {
+        $this->checkAuth($request);
+
         $user = $this->getUserOrFail($id);
 
         $meeting = new Meeting();
@@ -195,8 +236,10 @@ class DefaultController extends Controller
      * @Method({"GET"})
      * @ApiDoc(resource=true)
      */
-    public function getMeeting($id)
+    public function getMeeting(Request $request, $id)
     {
+        $this->checkAuth($request);
+
         $meeting = $this->getMeetingOrFail($id);
 
         return new JsonResponse($this->jsonSerialize($meeting));
@@ -225,7 +268,9 @@ class DefaultController extends Controller
      */
     public function updateMeetingAction(Request $request, $id)
     {
+        $this->checkAuth($request);
         $meeting = $this->getMeetingOrFail($id);
+        $this->checkCanEditMeeting($meeting);
 
         if ($value = $request->request->get('name'))
         {
@@ -255,9 +300,12 @@ class DefaultController extends Controller
      * @Method({"DELETE"})
      * @ApiDoc(resource=true)
      */
-    public function deleteMeeting($id)
+    public function deleteMeeting(Request $request, $id)
     {
+        $this->checkAuth($request);
+
         $meeting = $this->getMeetingOrFail($id);
+        $this->checkCanEditMeeting($meeting);
 
         $this->getEntityManager()->remove($meeting);
         $this->getEntityManager()->flush();
@@ -284,8 +332,12 @@ class DefaultController extends Controller
      */
     public function addAgendaItemAction(Request $request, $id)
     {
+        $this->checkAuth($request);
+        $meeting = $this->getMeetingOrFail($id);
+        $this->checkCanEditMeeting($meeting);
+
         $agenda = new AgendaItem();
-        $agenda->meeting = $this->getMeetingOrFail($id);
+        $agenda->meeting = $meeting;
         $agenda->topic = $this->getRequired($request, 'topic');
 
         if ($value = $request->request->get('description'))
@@ -318,6 +370,10 @@ class DefaultController extends Controller
      */
     public function updateAgendaItemAction(Request $request, $meetingId, $agendaId)
     {
+        $this->checkAuth($request);
+        $meeting = $this->getMeetingOrFail($meetingId);
+        $this->checkCanEditMeeting($meeting);
+
         $agenda = $this->getAgendaItemOrFail($meetingId, $agendaId);
 
         if ($value = $request->request->get('topic'))
@@ -355,8 +411,12 @@ class DefaultController extends Controller
      */
     public function addActionPointAction(Request $request, $id)
     {
+        $this->checkAuth($request);
+        $meeting = $this->getMeetingOrFail($id);
+        $this->checkCanEditMeeting($meeting);
+
         $action = new Action();
-        $action->meeting = $this->getMeetingOrFail($id);
+        $action->meeting = $meeting;
         $action->topic = $this->getRequired($request, 'topic');
 
         if ($value = $request->request->get('description'))
@@ -393,6 +453,10 @@ class DefaultController extends Controller
      */
     public function updateActionPointAction(Request $request, $meetingId, $actionId)
     {
+        $this->checkAuth($request);
+        $meeting = $this->getMeetingOrFail($id);
+        $this->checkCanEditMeeting($meeting);
+
         $action = $this->getActionPointOrFail($meetingId, $actionId);
 
         if ($value = $request->request->get('topic'))
@@ -434,8 +498,17 @@ class DefaultController extends Controller
      *      resource=true
      * )
      */
-    public function deleteActionPointAction($meetingId, $actionId)
+    public function deleteActionPointAction
+    (
+        Request $request,
+        $meetingId,
+        $actionId
+    )
     {
+        $this->checkAuth($request);
+        $meeting = $this->getMeetingOrFail($id);
+        $this->checkCanEditMeeting($meeting);
+
         $action = $this->getActionPointOrFail($meetingId, $actionId);
 
         $this->getEntityManager()->remove($action);
@@ -465,6 +538,10 @@ class DefaultController extends Controller
         $actionId
     )
     {
+        $this->checkAuth($request);
+        $meeting = $this->getMeetingOrFail($id);
+        $this->checkCanEditMeeting($meeting);
+
         $action = $this->getActionPointOrFail($meetingId, $actionId);
         $user = $this->getUserOrFail($this->getRequired($request, 'id'));
 
@@ -491,6 +568,10 @@ class DefaultController extends Controller
         $userId
     )
     {
+        $this->checkAuth($request);
+        $meeting = $this->getMeetingOrFail($id);
+        $this->checkCanEditMeeting($meeting);
+
         $action = $this->getActionPointOrFail($meetingId, $actionId);
         $user = $this->getUserOrFail($userId);
 
@@ -511,6 +592,8 @@ class DefaultController extends Controller
      */
     public function sendEmailsAction(Request $request, $id)
     {
+        $this->checkAuth($request);
+
         $meeting = $this->getMeetingOrFail($id);
 
         foreach ($meeting->attendees as $user)
@@ -630,7 +713,7 @@ class DefaultController extends Controller
 
     private function notFound($text)
     {
-        throw new \Exception($text);
+        throw new \Exception($text, 404);
     }
 
     private function getEntityManager()
@@ -646,6 +729,51 @@ class DefaultController extends Controller
         $serializer = SerializerBuilder::create()->build();
 
         return $serializer->toArray($item, $context);
+    }
+
+    private function checkCanEditMeeting(Meeting $meeting)
+    {
+        if (!$this->user->canEditMeeting($meeting))
+        {
+            throw new \Exception('Not allowed to edit meeting', 403);
+        }
+    }
+
+    private function checkAuth(Request $request)
+    {
+        if (!$this->setupAuth($request))
+        {
+            throw new \Exception('Not allowed', 403);
+        }
+    }
+
+    private function setupAuth(Request $request)
+    {
+        $value = $request->headers->get('authorization');
+
+        if (!$value)
+        {
+            return false;
+        }
+
+        $value = explode(' ', $value);
+
+        if (!isset($value[1]) || $value[0] !== 'Bearer')
+        {
+            return false;
+        }
+
+        $token = $this->getEntityManager()->getRepository(Token::class)
+            ->findOneByToken($value);
+
+        if (!$token)
+        {
+            return false;
+        }
+
+        $this->user = $token->user;
+
+        return true;
     }
 
     /**

@@ -14,6 +14,8 @@ use JustMeet\AppBundle\Traits\DoctrineFix;
  * @ORM\Table(name="user")
  * @ORM\Entity
  * @JMS\ExclusionPolicy("all")
+ * @IgnoreAnnotation("readable")
+ * @IgnoreAnnotation("writable")
  */
 class User
 {
@@ -29,6 +31,14 @@ class User
      * @JMS\Groups({"item", "full"})
      */
     protected $id;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="admin", type="boolean")
+     * @readable
+     * @writable
+     */
+    protected $admin;
 
     /**
      * @var string
@@ -81,6 +91,11 @@ class User
      * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\Action", mappedBy="users")
      */
     protected $actions;
+
+    public function canEditMeeting(Meeting $meeting)
+    {
+        return $this->admin || $this->id === $meeting->owner->id;
+    }
 
     public function getActionsForMeeting(Meeting $meeting)
     {
