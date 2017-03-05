@@ -181,6 +181,20 @@ class DefaultController extends Controller
     }
 
     /**
+     * Gets a given meeting
+     *
+     * @Route("/meeting/{id}", name="get_meeting")
+     * @Method({"GET"})
+     * @ApiDoc
+     */
+    public function getMeeting($id)
+    {
+        $meeting = $this->getMeetingOrFail($id);
+
+        return new JsonResponse($this->jsonSerialize($meeting));
+    }
+
+    /**
      * Update meeting
      *
      * @Route("/meeting/{id}", name="update_meeting")
