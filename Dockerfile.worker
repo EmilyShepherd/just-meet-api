@@ -1,0 +1,9 @@
+FROM php:7-cli
+
+RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-install sockets 
+RUN docker-php-ext-install bcmath 
+
+WORKDIR /var/www/symfony
+
+CMD ["./bin/console", "rabbitmq:consumer", "-m 50", "send_sms"]

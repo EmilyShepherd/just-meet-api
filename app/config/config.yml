@@ -69,3 +69,31 @@ nelmio_api_doc:
     name: Just Meet API Docs
     cache:
         enabled: false
+
+old_sound_rabbit_mq:
+    connections:
+        default:
+            url:      "amqp://wembbrlh:Lg26bk8d5vXQh49Dv9kv3Pnwf9pwPj_i@penguin.rmq.cloudamqp.com/wembbrlh"
+            lazy:     false
+            connection_timeout: 3
+            read_write_timeout: 3
+
+            # requires php-amqplib v2.4.1+ and PHP5.4+
+            keepalive: false
+
+            # requires php-amqplib v2.4.1+
+            heartbeat: 0
+
+            #requires php_sockets.dll
+            use_socket: false # default false
+    producers:
+        send_sms:
+            connection:       default
+            exchange_options: {name: 'send-sms', type: direct}
+            service_alias:    send_sms # no alias by default
+    consumers:
+        send_sms:
+            connection:       default
+            exchange_options: {name: 'send-sms', type: direct}
+            queue_options:    {name: 'send-sms'}
+            callback:         send_sms_service

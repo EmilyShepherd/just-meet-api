@@ -26,7 +26,8 @@
     "jawsdb",
     "newrelic",
     "papertrail",
-    "sengrid"
+    "sendgrid",
+    "cloudamqp"
   ],
   "buildpacks": [
     {
