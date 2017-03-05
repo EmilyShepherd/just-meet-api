@@ -490,9 +490,7 @@ class DefaultController extends Controller
                 )
                 */
             ;
-            //$this->get('mailer')->send($message);
-            //
-            return ;
+            $this->get('mailer')->send($message);
         }
 
         return new JsonResponse(true);
