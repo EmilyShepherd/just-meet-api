@@ -7,6 +7,7 @@ use Nexmo\Client as NexmoClient;
 use Nexmo\Client\Credentials\Basic as BasicCredentials;
 use Doctrine\ORM\EntityManager;
 use JustMeet\AppBundle\Entity\User;
+use JustMeet\AppBundle\Entity\Meeting;
 
 
 class SendSmsConsumer implements ConsumerInterface 
@@ -48,6 +49,8 @@ class SendSmsConsumer implements ConsumerInterface
         $info = \unserialize($msg->body);
         $user = $this->em->getRepository(User::class)
             ->findOneById($info['user_id']);
+        $meeting = $this->em->getRepository(Meeting::class)
+            ->findOneById($info['meeting_id']);
 
         if (!$user)
         {
@@ -59,7 +62,7 @@ class SendSmsConsumer implements ConsumerInterface
             'from' => "Just Meet",
             'text' =>
                 'Hey ' . $user->firstName . '. Here\'s your next '
-                . 'meeting: ' . $user->meetings->first()->name
+                . 'meeting: ' . $meeting->name
         ]);  
         
         if (!$message) {
