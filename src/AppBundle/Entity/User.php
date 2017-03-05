@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Spaark\CompositeUtils\Traits\AllReadableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use JustMeet\AppBundle\Traits\DoctrineFix;
 
 /**
  * User
@@ -17,6 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class User
 {
     use AllReadableTrait;
+    use DoctrineFix;
 
     /**
      * @var integer
@@ -71,6 +73,20 @@ class User
      * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\Action", mappedBy="users")
      */
     private $actions;
+
+    public function getActionsForMeeting(Meeting $meeting)
+    {
+        $return = [];
+        foreach ($this->actions as $action)
+        {
+            if ($action->meeting->id === $meeting->id)
+            {
+                $return[] = $action;
+            }
+        }
+
+        return $return;
+    }
 
     public function __construct()
     {
