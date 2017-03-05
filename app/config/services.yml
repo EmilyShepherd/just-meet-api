@@ -16,6 +16,7 @@ services:
         class: JustMeet\AppBundle\Consumer\SendSmsConsumer
         arguments:
             - "%nexmo%"
+            - "@doctrine.orm.entity_manager"
 
     utility.jsonrequest.action_listener:
         class: JustMeet\AppBundle\EventListener\JsonListener

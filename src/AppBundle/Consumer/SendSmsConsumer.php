@@ -5,6 +5,8 @@ use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Nexmo\Client as NexmoClient;
 use Nexmo\Client\Credentials\Basic as BasicCredentials;
+use Doctrine\ORM\EntityManager;
+use JustMeet\AppBundle\Entity\User;
 
 
 class SendSmsConsumer implements ConsumerInterface 
@@ -19,10 +21,16 @@ class SendSmsConsumer implements ConsumerInterface
      */
     private $secret;
 
-    public function __construct(array $params)
+    /**
+     * @var EntityManager
+     */
+    private $em;
+
+    public function __construct(array $params, EntityManager $em)
     {
         $this->key = $params['key'];
         $this->secret = $params['secret'];
+        $this->em = $em;
     }
 
     public function execute(AMQPMessage $msg)
@@ -37,13 +45,23 @@ class SendSmsConsumer implements ConsumerInterface
             $this->key, $this->secret
         ));
 
+        $info = \unserialize($msg->body);
+        $user = $this->em->getRepository(User::class)
+            ->findOneById($info['user_id']);
+
+        if (!$user)
+        {
+            return false;
+        }
+
         $message = $client->message()->send([
             'to' => "+447834228887",
-            'from' => "NEXMO",
-            'text' => 'Test message from the Nexmo PHP Client'
+            'from' => "Just Meet",
+            'text' =>
+                'Hey ' . $user->firstName . '. Here\'s your next '
+                . 'meeting: ' . $user->meetings->first()->name
         ]);  
         
-        $isTaskSuccess = true;
         if (!$message) {
             return false;
         }
