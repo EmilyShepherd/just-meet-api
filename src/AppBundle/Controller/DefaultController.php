@@ -425,6 +425,25 @@ class DefaultController extends Controller
     }
 
     /**
+     * Deletes an action point
+     *
+     * @Route("/meeting/{meetingId}/action/{actionId}", name="delete_action_point")
+     * @Method({"DELETE"})
+     * @ApiDoc(
+     *      resource=true
+     * )
+     */
+    public function deleteActionPointAction($meetingId, $actionId)
+    {
+        $action = $this->getActionPointOrFail($meetingId, $actionId);
+
+        $this->getEntityManager()->remove($action);
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse(true);
+    }
+
+    /**
      * Adds a user to an action
      *
      * @Route("/meeting/{meetingId}/action/{actionId}/users", name="add_action_user")
