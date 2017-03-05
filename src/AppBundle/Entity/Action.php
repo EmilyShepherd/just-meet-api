@@ -5,6 +5,7 @@ namespace JustMeet\AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Spaark\CompositeUtils\Traits\PropertyAccessTrait;
+use JustMeet\AppBundle\Traits\DoctrineFix;
 
 /**
  * Action
@@ -18,6 +19,7 @@ use Spaark\CompositeUtils\Traits\PropertyAccessTrait;
 class Action
 {
     use PropertyAccessTrait;
+    use DoctrineFix;
 
     /**
      * @var integer

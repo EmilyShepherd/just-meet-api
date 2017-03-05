@@ -8,6 +8,7 @@ use Spaark\CompositeUtils\Traits\AllReadableTrait;
 use Spaark\CompositeUtils\Traits\AutoConstructTrait;
 use Spaark\CompositeUtils\Traits\PropertyAccessTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use JustMeet\AppBundle\Traits\DoctrineFix;
 use DateTime;
 
 /**
@@ -23,6 +24,7 @@ use DateTime;
 class Meeting
 {
     use PropertyAccessTrait;
+    use DoctrineFix;
 
     /**
      * @var integer

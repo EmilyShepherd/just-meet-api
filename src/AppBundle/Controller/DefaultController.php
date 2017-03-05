@@ -472,7 +472,11 @@ class DefaultController extends Controller
                 ->setFrom('update@justmeet.io')
                 ->setTo($user->email)
                 ->setBody(
-                   'Aight mate?',
+                    $this->renderView('default/email.html.twig', [
+                        'user' => $user,
+                        'meeting' => $meeting,
+                        'actions' => $user->getActionsForMeeting($meeting)
+                    ]),
                     'text/html'
                 )
                 /*
@@ -486,7 +490,9 @@ class DefaultController extends Controller
                 )
                 */
             ;
-            $this->get('mailer')->send($message);
+            //$this->get('mailer')->send($message);
+            //
+            return ;
         }
 
         return new JsonResponse(true);
