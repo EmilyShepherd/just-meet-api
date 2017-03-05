@@ -69,11 +69,11 @@ nelmio_api_doc:
     name: Just Meet API Docs
     cache:
         enabled: false
-
+        
 old_sound_rabbit_mq:
     connections:
         default:
-            url:      "amqp://wembbrlh:Lg26bk8d5vXQh49Dv9kv3Pnwf9pwPj_i@penguin.rmq.cloudamqp.com/wembbrlh"
+            url:      "%env(CLOUDAMQP_URL)%"
             lazy:     false
             connection_timeout: 3
             read_write_timeout: 3

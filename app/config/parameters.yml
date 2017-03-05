@@ -2,3 +2,8 @@
 parameters:
     mailer_transport: smtp
     secret: 44203a96ec921579c366634215462924d0584c8a
+
+    nexmo:
+        key:        "%env(NEXMO_KEY)%"
+        secret:     "%env(NEXMO_SECRET)%"
+
