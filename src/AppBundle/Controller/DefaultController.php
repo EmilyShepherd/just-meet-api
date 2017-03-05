@@ -142,6 +142,7 @@ class DefaultController extends Controller
      * @Route("/user/{id}/meetings", name="create_meeting")
      * @Method({"POST"})
      * @ApiDoc(
+     *      resource=true,
      *      requirements={
      *          {
      *              "name"="name"
@@ -191,7 +192,7 @@ class DefaultController extends Controller
      *
      * @Route("/meeting/{id}", name="get_meeting")
      * @Method({"GET"})
-     * @ApiDoc
+     * @ApiDoc(resource=true)
      */
     public function getMeeting($id)
     {
@@ -206,6 +207,7 @@ class DefaultController extends Controller
      * @Route("/meeting/{id}", name="update_meeting")
      * @Method({"PUT"})
      * @ApiDoc(
+     *      resource=true,
      *      requirements={
      *          {
      *              "name"="name"
@@ -250,7 +252,7 @@ class DefaultController extends Controller
      *
      * @Route("/meeting/{id}", name="delete_meeting")
      * @Method({"DELETE"})
-     * @ApiDoc
+     * @ApiDoc(resource=true)
      */
     public function deleteMeeting($id)
     {
@@ -268,6 +270,7 @@ class DefaultController extends Controller
      * @Route("/meeting/{id}/agenda", name="add_agenda_item")
      * @Method({"POST"})
      * @ApiDoc(
+     *      resource=true,
      *      requirements={
      *          {
      *              "name"="topic"
@@ -301,6 +304,7 @@ class DefaultController extends Controller
      * @Route("/meeting/{meetingId}/agenda/{agendaId}", name="update_agenda_item")
      * @Method({"PUT"})
      * @ApiDoc(
+     *      resource=true,
      *      requirements={
      *          {
      *              "name"="topic"
@@ -337,6 +341,7 @@ class DefaultController extends Controller
      * @Route("/meeting/{id}/actions", name="add_action_point")
      * @Method({"POST"})
      * @ApiDoc(
+     *      resource=true,
      *      requirements={
      *          {
      *              "name"="topic"
@@ -370,6 +375,7 @@ class DefaultController extends Controller
      * @Route("/meeting/{meetingId}/action/{actionId}", name="update_action_point")
      * @Method({"PUT"})
      * @ApiDoc(
+     *      resource=true,
      *      requirements={
      *          {
      *              "name"="topic"
@@ -424,6 +430,7 @@ class DefaultController extends Controller
      * @Route("/meeting/{meetingId}/action/{actionId}/users", name="add_action_user")
      * @Method({"POST"})
      * @ApiDoc(
+     *      resource=true,
      *      requirements={
      *          {
      *              "name"="id"
@@ -454,7 +461,7 @@ class DefaultController extends Controller
      *
      * @Route("/meeting/{meetingId}/action/{actionId}/user/{userId}", name="remove_action_user")
      * @Method({"DELETE"})
-     * @ApiDoc
+     * @ApiDoc(resource=true)
      */
     public function removeUserFromActionPointAction
     (
@@ -480,7 +487,7 @@ class DefaultController extends Controller
      *
      * @Route("/meeting/{id}/email")
      * @Method({"POST"})
-     * @ApiDoc
+     * @ApiDoc(resource=true)
      */
     public function sendEmailsAction(Request $request, $id)
     {
