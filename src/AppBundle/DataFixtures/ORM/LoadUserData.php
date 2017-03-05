@@ -17,6 +17,7 @@ class LoadUserData implements FixtureInterface
         $accessor->setRawValue('firstName', 'Emily');
         $accessor->setRawValue('secondName', 'Shepherd');
         $accessor->setRawValue('email', 'emily.shepherd@wearetwogether.com');
+        $accessor->setRawValue('password', password_hash('1234', PASSWORD_DEFAULT));
         $manager->persist($user);
 
         $user2 = new User();
@@ -24,6 +25,7 @@ class LoadUserData implements FixtureInterface
         $accessor->setRawValue('firstName', 'Jon');
         $accessor->setRawValue('secondName', 'Busby');
         $accessor->setRawValue('email', 'jon.busby@wearetwogether.com');
+        $accessor->setRawValue('password', password_hash('4321', PASSWORD_DEFAULT));
         $manager->persist($user2);
 
         $manager->flush();

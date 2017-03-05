@@ -54,6 +54,12 @@ class DefaultController extends Controller
     {
         $user = $this->getEntityManager()->getRepository(User::class)
             ->findOneByEmail($this->getRequired($request, 'email'));
+        $password = $this->getRequired($request, 'password');
+
+        if (!password_verify($password, $user->password))
+        {
+            throw new \Exception('Authentication failed', 403);
+        }
 
         $token = new Token(uniqid(), $user);
 

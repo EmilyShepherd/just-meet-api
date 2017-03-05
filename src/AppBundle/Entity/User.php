@@ -38,7 +38,7 @@ class User
      * @readable
      * @writable
      */
-    protected $admin;
+    protected $admin = false;
 
     /**
      * @var string
@@ -63,6 +63,12 @@ class User
      * @JMS\Groups({"full"})
      */
     protected $email;
+
+    /**
+     * @var string
+     * @ORM\Column(name="password", type="string")
+     */
+    protected $password;
 
     /**
      * @var string
