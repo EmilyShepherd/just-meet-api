@@ -14,6 +14,8 @@ services:
 
     send_sms_service:
         class: JustMeet\AppBundle\Consumer\SendSmsConsumer
+        arguments:
+            - "%nexmo%"
 
     utility.jsonrequest.action_listener:
         class: JustMeet\AppBundle\EventListener\JsonListener

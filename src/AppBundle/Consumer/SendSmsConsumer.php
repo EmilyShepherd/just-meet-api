@@ -9,6 +9,22 @@ use Nexmo\Client\Credentials\Basic as BasicCredentials;
 
 class SendSmsConsumer implements ConsumerInterface 
 {
+    /**
+     * @var string
+     */
+    private $key;
+
+    /**
+     * @var string
+     */
+    private $secret;
+
+    public function __construct(array $params)
+    {
+        $this->key = $params['key'];
+        $this->secret = $params['secret'];
+    }
+
     public function execute(AMQPMessage $msg)
     {
         // Process picture upload.
@@ -18,7 +34,7 @@ class SendSmsConsumer implements ConsumerInterface
 
         $client = new NexmoClient(new BasicCredentials
         (
-            '35c8329c', 'a9f5b169560927ac'
+            $this->key, $this->secret
         ));
 
         $message = $client->message()->send([
