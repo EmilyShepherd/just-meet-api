@@ -70,6 +70,38 @@ class DefaultController extends Controller
     }
 
     /**
+     * Destroys all sessions for a user
+     *
+     * @Route("/user/{id}/sessions")
+     * @Method({"DELETE"})
+     * @ApiDoc(
+     *      resource=true
+     * )
+     */
+    public function deleteSessionsAction(Request $request, $id)
+    {
+        $this->checkAuth($request);
+        $user = $this->getUserOrFail($id);
+        if (!$this->user->admin && $this->user->id != $id)
+        {
+            throw new \Exception('Not Allowed', 403);
+        }
+
+        $sessions = $this->getEntityManager()->getRepository(Token::class)
+            ->findByUser($user);
+
+        foreach ($sessions as $session)
+        {
+            $this->getEntityManager()->remove($session);
+        }
+
+        $this->getEntityManager()->flush();
+
+        return new JsonResponse(true);
+    }
+
+
+    /**
      * Gets all users
      *
      * ## Return
