@@ -48,6 +48,19 @@ class Meeting
     protected $name;
 
     /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="JustMeet\AppBundle\Entity\User")
+     * @ORM\JoinColumns(
+     *      @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * )
+     * @JMS\Expose
+     * @JMS\Groups({"full"})
+     * @readable
+     * @writable
+     */
+    protected $owner;
+
+    /**
      * @var DateTime
      * @ORM\Column(name="start_time", type="datetime")
      * @JMS\Expose

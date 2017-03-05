@@ -163,6 +163,7 @@ class DefaultController extends Controller
         $meeting = new Meeting();
 
         $meeting->name = $this->getRequired($request, 'name');
+        $meeting->owner = $user;
 
         $meeting->startTime =
             new \DateTime($this->getRequired($request, 'start_time'));

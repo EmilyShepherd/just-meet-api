@@ -55,6 +55,14 @@ class User
     protected $email;
 
     /**
+     * @var string
+     * @ORM\Column(name="phone", type="string", nullable=true)
+     * @JMS\Expose
+     * @JMS\Groups({"full"})
+     */
+    protected $phone;
+
+    /**
      * @var Meeting
      * @ORM\ManyToMany(targetEntity="JustMeet\AppBundle\Entity\Meeting", inversedBy="attendees")
      * @ORM\JoinTable(name="attendee",

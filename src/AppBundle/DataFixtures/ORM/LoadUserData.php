@@ -32,6 +32,7 @@ class LoadUserData implements FixtureInterface
         $accessor = new RawPropertyAccessor($meeting);
         $accessor->setRawValue('name', 'Hackathon Planing');
         $accessor->setRawValue('startTime', new \DateTime());
+        $accessor->setRawValue('owner', $user);
         $meeting->attendees->add($user);
         $meeting->attendees->add($user2);
         $user->meetings->add($meeting);
